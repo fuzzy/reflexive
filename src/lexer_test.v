@@ -1,13 +1,13 @@
 module main
 
-import token
+import lexer
 
 fn col(c int, s string) string {
 	return '\033[1;3${c}m${s}\033[0m'
 }
 
 fn test_lookup_token() {
-	mut tkns := token.TokenMap(map[string]token.TokenType{})
+	mut tkns := lexer.TokenMap(map[string]lexer.TokenType{})
 	tkns['let'] = 'LET'
 	tkns['illegal'] = 'ILLEGAL'
 	tkns['eof'] = 'EOF'
@@ -49,16 +49,16 @@ fn test_lookup_token() {
 	tkns['gtorequals'] = '>='
 	tkns['l_and'] = '&&'
 	tkns['l_or'] = '||'
-	kwds := token.TokenMap(map[string]token.TokenType{})
-	tknz := token.new_tokenizer(tkns, kwds)
+	kwds := lexer.TokenMap(map[string]lexer.TokenType{})
+	tknz := lexer.new('', tkns, kwds)
 	for k, v in tkns {
 		assert tknz.lookup_token(k) == v
 	}
 }
 
 fn test_lookup_keyword() {
-	tkns := token.TokenMap(map[string]token.TokenType{})
-	mut kwds := token.TokenMap(map[string]token.TokenType{})
+	tkns := lexer.TokenMap(map[string]lexer.TokenType{})
+	mut kwds := lexer.TokenMap(map[string]lexer.TokenType{})
 	kwds['let'] = 'LET'
 	kwds['fn'] = 'FUNCTION'
 	kwds['if'] = 'IF'
@@ -68,14 +68,14 @@ fn test_lookup_keyword() {
 	kwds['false'] = 'FALSE'
 	kwds['and'] = '&&'
 	kwds['or'] = '||'
-	tknz := token.new_tokenizer(tkns, kwds)
+	tknz := lexer.new('', tkns, kwds)
 	for k, v in kwds {
 		assert tknz.lookup_keyword(k) == v
 	}
 }
 
 fn test_lookup_identifier() {
-	mut tknz := token.new_tokenizer(token.TokenMap(map[string]token.TokenType{}), token.TokenMap(map[string]token.TokenType{}))
+	mut tknz := lexer.new('', lexer.TokenMap(map[string]lexer.TokenType{}), lexer.TokenMap(map[string]lexer.TokenType{}))
 	tknz.identifiers['foo'] = 'bar'
 	assert tknz.lookup_identifier('foo') == 'bar'
 }
