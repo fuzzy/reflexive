@@ -31,7 +31,7 @@ pub struct Lexer {
 	regard_whitespace bool
 mut:
 	// this is too
-    innumber bool
+	innumber bool
 	instring bool
 pub:
 	input    string
@@ -114,7 +114,7 @@ pub fn (mut lexx Lexer) lookup_keyword(id string) TokenType {
 	return retv
 }
 
-pub fn (mut lexx Lexer)
+pub fn (mut lexx Lexer) next_token[T]() GenericToken[T] {}
 
 fn is_letter(ch byte) bool {
 	return (`a` <= ch && ch <= `z`) || (`A` <= ch && ch <= `Z`) || ch == `_`

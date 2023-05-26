@@ -50,7 +50,7 @@ fn test_lookup_token() {
 	tkns['l_and'] = '&&'
 	tkns['l_or'] = '||'
 	kwds := lexer.TokenMap(map[string]lexer.TokenType{})
-	tknz := lexer.new('', tkns, kwds)
+	mut tknz := lexer.new('', tkns, kwds)
 	for k, v in tkns {
 		assert tknz.lookup_token(k) == v
 	}
@@ -68,7 +68,7 @@ fn test_lookup_keyword() {
 	kwds['false'] = 'FALSE'
 	kwds['and'] = '&&'
 	kwds['or'] = '||'
-	tknz := lexer.new('', tkns, kwds)
+	mut tknz := lexer.new('', tkns, kwds)
 	for k, v in kwds {
 		assert tknz.lookup_keyword(k) == v
 	}
