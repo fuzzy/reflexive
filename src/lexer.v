@@ -31,16 +31,16 @@ pub fn new_tokenizer(tkns TokenMap, kwds TokenMap) Tokenizer {
 }
 
 pub fn (toki Tokenizer) lookup_identifier(id string) TokenType {
-	retv := toki.identifiers[id] or { return illegal }
+	retv := toki.identifiers[id] or { return 'ILLEGAL' }
 	return retv
 }
 
 pub fn (toki Tokenizer) lookup_token(id string) TokenType {
-	retv := toki.tokens[id] or { return illegal }
+	retv := toki.tokens[id] or { return 'ILLEGAL' }
 	return retv
 }
 
 pub fn (toki Tokenizer) lookup_keyword(id string) TokenType {
-	retv := toki.keywords[id] or { return ident }
+	retv := toki.keywords[id] or { return 'IDENT' }
 	return retv
 }
