@@ -1,5 +1,6 @@
 VCMD=$$(which v)
-VEXE=vunky
+VFLAGS=-stats
+VEXE=libreflexive
 
 help:
 	@echo "$(MAKE) [test|build]"
@@ -10,20 +11,20 @@ help:
 
 test:
 	@printf '\033[1;33m#####\033[0m TESTING\n'
-	@printf "\033[1;36m$(VCMD) -stats test .\033[0m\n"
-	@$(VCMD) -stats test .
+	@printf "\033[1;36m$(VCMD) $(VFLAGS) test .\033[0m\n"
+	@$(VCMD) $(VFLAGS) test .
 
 build: clean
 	@printf '\033[1;33m#####\033[0m BUILDING\n'
-	@printf "\033[1;36m$(VCMD) -stats -o $(VEXE) .\033[0m\n"
-	@$(VCMD) -stats -o $(VEXE) .
+	@printf "\033[1;36m$(VCMD) $(VFLAGS) -o $(VEXE) .\033[0m\n"
+	@$(VCMD) $(VFLAGS) -shared -o $(VEXE) .
 
 prod: clean
 	@printf '\033[1;33m#####\033[0m BUILDING PROD\n'
-	@printf "\033[1;36m$(VCMD) -stats -W -prod -o $(VEXE).prod .\033[0m\n"
-	@$(VCMD) -stats -W -prod -o $(VEXE).prod .
+	@printf "\033[1;36m$(VCMD) $(VFLAGS) -W -prod -o $(VEXE).prod .\033[0m\n"
+	@$(VCMD) $(VFLAGS) -shared -W -prod -o $(VEXE).prod .
 
 clean:
 	@printf '\033[1;33m#####\033[0m CLEANING\n'
-	@printf "\033[1;36mrm -fv $(VEXE) $(VEXE).prod\033[0m\n"
-	@rm -fv $(VEXE) $(VEXE).prod
+	@printf "\033[1;36mrm -fv $(VEXE).so $(VEXE).prod.so\033[0m\n"
+	@rm -fv $(VEXE).so $(VEXE).prod.so
