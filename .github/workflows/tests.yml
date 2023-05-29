@@ -14,5 +14,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install dependencies
+    - name: Test gcc
+      run: gcc -dumpmachine
+
+    - name: Run unit tests
       run: make test
