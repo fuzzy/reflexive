@@ -1,6 +1,6 @@
-VCMD=$$(which v)
-VFLAGS=-stats
-VEXE=libreflexive
+VCMD ?= ./v
+VFLAGS = -stats
+VEXE = libreflexive
 
 help:
 	@echo "$(MAKE) [test|build]"
