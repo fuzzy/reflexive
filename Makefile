@@ -12,17 +12,17 @@ help:
 test:
 	@printf '\033[1;33m#####\033[0m TESTING\n'
 	@printf "\033[1;36m$(VCMD) $(VFLAGS) test .\033[0m\n"
-	@$(VCMD) $(VFLAGS) test .
+	@$(VCMD) $(VFLAGS) test ./src
 
 build: clean
 	@printf '\033[1;33m#####\033[0m BUILDING\n'
 	@printf "\033[1;36m$(VCMD) $(VFLAGS) -o $(VEXE) .\033[0m\n"
-	@$(VCMD) $(VFLAGS) -shared -o $(VEXE) .
+	@$(VCMD) $(VFLAGS) -shared -o $(VEXE) ./src
 
 prod: clean
 	@printf '\033[1;33m#####\033[0m BUILDING PROD\n'
 	@printf "\033[1;36m$(VCMD) $(VFLAGS) -W -prod -o $(VEXE).prod .\033[0m\n"
-	@$(VCMD) $(VFLAGS) -shared -W -prod -o $(VEXE).prod .
+	@$(VCMD) $(VFLAGS) -shared -W -prod -o $(VEXE).prod ./src
 
 clean:
 	@printf '\033[1;33m#####\033[0m CLEANING\n'
