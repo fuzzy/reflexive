@@ -17,7 +17,5 @@ jobs:
         path: vlang
     - name: Build VLang
       run: make -C vlang
-    - name: Copy V compiler into path
-      run: cp vlang/v .
     - name: Run unit tests
       run: make test

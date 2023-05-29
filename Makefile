@@ -1,4 +1,4 @@
-VCMD ?= ./v
+VCMD ?= ./vlang/v
 VFLAGS = -stats
 VEXE = libreflexive
 
