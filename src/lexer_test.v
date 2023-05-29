@@ -79,3 +79,42 @@ fn test_lookup_identifier() {
 	tknz.identifiers['foo'] = 'bar'
 	assert tknz.lookup_identifier('foo') == 'bar'
 }
+
+fn test_lexer_next_token_single_chars() {
+	mut tkns := lexer.TokenMap(map[string]lexer.TokenType{})
+	tkns['initialize'] = ':='
+	tkns['assign'] = '='
+	tkns['plus'] = '+'
+	tkns['minus'] = '-'
+	tkns['divide'] = '/'
+	tkns['multiply'] = '*'
+	tkns['remainder'] = '%'
+	tkns['powerof'] = '^'
+	tkns['lessthan'] = '<'
+	tkns['greaterthan'] = '>'
+	tkns['keyend'] = ':'
+	tkns['exclamation'] = '!'
+	tkns['comma'] = ','
+	tkns['semicolon'] = ';'
+	tkns['lbracket'] = '['
+	tkns['rbracket'] = ']'
+	tkns['lparen'] = '('
+	tkns['rparen'] = ')'
+	tkns['lbrace'] = '{'
+	tkns['rbrace'] = '}'
+	tkns['squote'] = "'"
+	tkns['dquote'] = '"'
+	tkns['equals'] = '=='
+	tkns['notequals'] = '!='
+	tkns['ltorequals'] = '<='
+	tkns['gtorequals'] = '>='
+	tkns['l_and'] = '&&'
+	tkns['l_or'] = '||'
+	input := ['=', '+', '-', '/', '*', '%', '^', '<', '>', ':', '!', ',', ';', '[', ']', '(', ')',
+		'{', '}']
+	for _, inp in input {
+		mut tknz := lexer.new(inp, tkns, lexer.TokenMap(map[string]lexer.TokenType{}))
+		t := tknz.next_token()
+		assert inp == t.literal
+	}
+}

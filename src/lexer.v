@@ -3,15 +3,15 @@ module lexer
 pub type TokenType = string
 pub type TokenMap = map[string]TokenType
 
-pub struct GenericToken[T] {
-pub mut:
+pub struct GenericToken {
+pub:
 	id      TokenType
-	literal T
+	literal string
 }
 
 // new_token returns a token with the appropriate type.
-pub fn new_token[T](id string, lit T) GenericToken[T] {
-	return GenericToken[T]{
+pub fn new_token(id TokenType, lit string) GenericToken {
+	return GenericToken{
 		literal: lit
 		id: id
 	}
@@ -19,7 +19,7 @@ pub fn new_token[T](id string, lit T) GenericToken[T] {
 
 // we'll keep this around just to make debugging things a bit easier.
 // I can't think of any other use for it
-pub fn (toki GenericToken[T]) str() string {
+pub fn (toki GenericToken) str() string {
 	return 'Type: ${toki.id} Value: ${toki.literal}'
 }
 
@@ -27,9 +27,16 @@ pub fn (toki GenericToken[T]) str() string {
 pub struct Lexer {
 	// this is reserved for future work
 	regard_whitespace bool
-	// standard types, custom ones can be added
-	types map[string]string
 mut:
+	// standard types, custom ones can be added
+	types map[string]string = {
+		'int':    'INTEGER'
+		'float':  'FLOAT'
+		'byte':   'BYTE'
+		'string': 'STRING'
+		'array':  'ARRAY'
+		'hash':   'HASH'
+	}
 	// these two are  also reserved for future work
 	innumber bool
 	instring bool
@@ -56,10 +63,28 @@ pub fn new(inp string, tkns TokenMap, kwds TokenMap) Lexer {
 	return retv
 }
 
-pub fn (mut lexx Lexer) next_token[T]() GenericToken[T] {
-	mut tok := token.GenericToken[T]
-	{
+pub fn (mut lexx Lexer) next_token() GenericToken {
+	mut tok := GenericToken{}
+	lexx.ignore_whitespace()
+	// first pass checks to see if it's a standardized token
+	for k, v in lexx.tokens {
+		match lexx.current {
+			v[0] {
+				if v.len == 2 && lexx.peek_char() == v[1] {
+					lexx.read_char()
+					tok = new_token(k, v)
+					break
+				} else if v.len == 1 {
+					tok = new_token(k, v)
+					break
+				}
+			}
+			else {
+				tok = new_token('ILLEGAL', lexx.current.ascii_str())
+			}
+		}
 	}
+	lexx.read_char()
 	return tok
 }
 
