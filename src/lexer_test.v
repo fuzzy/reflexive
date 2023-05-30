@@ -82,7 +82,6 @@ fn test_lookup_identifier() {
 
 fn test_lexer_next_token_single_chars() {
 	mut tkns := lexer.TokenMap(map[string]lexer.TokenType{})
-	tkns['initialize'] = ':='
 	tkns['assign'] = '='
 	tkns['plus'] = '+'
 	tkns['minus'] = '-'
@@ -104,14 +103,25 @@ fn test_lexer_next_token_single_chars() {
 	tkns['rbrace'] = '}'
 	tkns['squote'] = "'"
 	tkns['dquote'] = '"'
+	input := ['=', '+', '-', '/', '*', '%', '^', '<', '>', ':', '!', ',', ';', '[', ']', '(', ')',
+		'{', '}', "'", '"']
+	for _, inp in input {
+		mut tknz := lexer.new(inp, tkns, lexer.TokenMap(map[string]lexer.TokenType{}))
+		t := tknz.next_token()
+		assert inp == t.literal
+	}
+}
+
+fn test_lexer_next_token_double_chars() {
+	mut tkns := lexer.TokenMap(map[string]lexer.TokenType{})
+	tkns['initialize'] = ':='
 	tkns['equals'] = '=='
 	tkns['notequals'] = '!='
 	tkns['ltorequals'] = '<='
 	tkns['gtorequals'] = '>='
 	tkns['l_and'] = '&&'
 	tkns['l_or'] = '||'
-	input := ['=', '+', '-', '/', '*', '%', '^', '<', '>', ':', '!', ',', ';', '[', ']', '(', ')',
-		'{', '}']
+	input := [':=', '==', '!=', '<=', '>=', '&&', '||']
 	for _, inp in input {
 		mut tknz := lexer.new(inp, tkns, lexer.TokenMap(map[string]lexer.TokenType{}))
 		t := tknz.next_token()
