@@ -77,7 +77,11 @@ fn test_lookup_keyword() {
 fn test_lookup_identifier() {
 	mut tknz := lexer.new('', lexer.TokenMap(map[string]lexer.TokenType{}), lexer.TokenMap(map[string]lexer.TokenType{}))
 	tknz.identifiers['foo'] = 'bar'
-	assert tknz.lookup_identifier('foo') == 'bar'
+	tknz.identifiers['bar'] = 'baz'
+	tknz.identifiers['baz'] = 'qux'
+	for k, v in tknz.identifiers {
+		assert tknz.lookup_identifier(k) == v
+	}
 }
 
 fn test_lexer_next_token_single_chars() {
@@ -124,6 +128,26 @@ fn test_lexer_next_token_double_chars() {
 	input := [':=', '==', '!=', '<=', '>=', '&&', '||']
 	for _, inp in input {
 		mut tknz := lexer.new(inp, tkns, lexer.TokenMap(map[string]lexer.TokenType{}))
+		t := tknz.next_token()
+		assert inp == t.literal
+	}
+}
+
+fn test_lexer_identifiers() {
+	input := ['foo', 'bar']
+	tkns := lexer.TokenMap(map[string]lexer.TokenType{})
+	for _, inp in input {
+		mut tknz := lexer.new(inp, tkns, tkns)
+		t := tknz.next_token()
+		assert inp == t.literal
+	}
+}
+
+fn test_lexer_numbers() {
+	input := ['4', '4.2', '94.16', '7', '22', '99', '4']
+	tkns := lexer.TokenMap(map[string]lexer.TokenType{})
+	for _, inp in input {
+		mut tknz := lexer.new(inp, tkns, tkns)
 		t := tknz.next_token()
 		assert inp == t.literal
 	}

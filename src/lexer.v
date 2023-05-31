@@ -79,11 +79,19 @@ pub fn (mut lexx Lexer) next_token() GenericToken {
 					break
 				}
 			}
-			else {
-				tok = new_token('ILLEGAL', lexx.current.ascii_str())
-			}
+			else {}
 		}
 	}
+	if tok.literal.len == 0 {
+		if is_letter(lexx.current) {
+			return new_token('IDENTIFIER', lexx.read_identifier())
+		} else if is_digit(lexx.current) {
+			return new_token('NUMBER', lexx.read_number())
+		} else {
+			return new_token('ILLEGAL', lexx.current.ascii_str())
+		}
+	}
+
 	lexx.read_char()
 	return tok
 }
