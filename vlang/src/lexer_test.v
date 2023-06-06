@@ -1,12 +1,45 @@
 module main
 
+// stdlib
+import json
+// internal
 import lexer
+import os
+
+struct ConfigData {
+pub:
+	tokens map[string]string
+}
 
 fn col(c int, s string) string {
 	return '\033[1;3${c}m${s}\033[0m'
 }
 
 fn test_lookup_token() {
+	mut data := ConfigData{}
+	for _, v in ['${os.getwd()}/lexer_test.json', '${os.getwd()}/src/lexer_test.json'] {
+		if os.is_file(v) {
+			mut eof := false
+			mut tag := 0
+			fp := os.open_file(v, 'r')!
+			mut fdata := []u8{}
+			read := fp.read(mut fdata) or {
+				if typeof(err).name.contains('os.Eof') {
+					println('wellp')
+					eof = true
+				}
+				1
+			}
+			if eof {
+				println('read ${read} bytes')
+				println(fdata)
+				data = json.decode(ConfigData, fdata.bytestr()) or { panic(err) }
+				break
+			}
+		}
+	}
+	println(data)
+	println(os.getwd())
 	mut tkns := lexer.TokenMap(map[string]lexer.TokenType{})
 	tkns['let'] = 'LET'
 	tkns['illegal'] = 'ILLEGAL'

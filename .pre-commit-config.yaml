@@ -27,10 +27,10 @@ repos:
     - id: v-fmt
       name: V source formatting
       language: system
-      entry: v -w fmt ./src
+      entry: v -w fmt ./vlang/src
       files: ^.*src/.*\.v$
     - id: v-test
       name: V source testing
       language: system
       entry: v test
-      files: ^.*src/.*\.v$
+      files: ^.*vlang/src/.*\.v$
