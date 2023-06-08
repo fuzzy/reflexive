@@ -8,38 +8,32 @@ import os
 
 struct ConfigData {
 pub:
-	tokens map[string]string
+	tokens map[string]string [json: tokens]
 }
 
 fn col(c int, s string) string {
 	return '\033[1;3${c}m${s}\033[0m'
 }
 
-fn test_lookup_token() {
+fn get_test_data() ConfigData {
 	mut data := ConfigData{}
 	for _, v in ['${os.getwd()}/lexer_test.json', '${os.getwd()}/src/lexer_test.json'] {
 		if os.is_file(v) {
 			mut eof := false
 			mut tag := 0
-			fp := os.open_file(v, 'r')!
-			mut fdata := []u8{}
-			read := fp.read(mut fdata) or {
-				if typeof(err).name.contains('os.Eof') {
-					println('wellp')
-					eof = true
-				}
-				1
-			}
-			if eof {
-				println('read ${read} bytes')
-				println(fdata)
-				data = json.decode(ConfigData, fdata.bytestr()) or { panic(err) }
-				break
-			}
+			fp := os.open_file(v, 'r', 0o666) or { panic(err) }
+			mut fdata := []u8{len: 40960}
+			read := fp.read(mut fdata) or { 1 }
+			data = json.decode(ConfigData, fdata.bytestr()) or { ConfigData{} }
+			return data
 		}
 	}
-	println(data)
-	println(os.getwd())
+	return data
+}
+
+fn test_lookup_token() {
+	test_data := get_test_data()
+	println(test_data)
 	mut tkns := lexer.TokenMap(map[string]lexer.TokenType{})
 	tkns['let'] = 'LET'
 	tkns['illegal'] = 'ILLEGAL'
